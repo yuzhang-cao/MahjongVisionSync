@@ -1,8 +1,10 @@
-# MahjongTing
+# MahjongVisionSync
 
-An iOS Mahjong hand-assistance app.
+A multi-stream Mahjong tournament state recognition, audience data display, and replay system.
 
-It supports Guangdong and Sichuan rules, manual tile input, ready-hand and winning-hand calculation, meld management, and camera recognition.
+This project is intended for tournament staff, referees, broadcast data operators, and viewers. It does not provide real-time decision advice to players. The goal is not merely tile recognition; the system turns recognition results from multiple competition video streams or capture devices into structured match events for tournament records, broadcast overlays, referee review, and post-match replay.
+
+The current codebase comes from `MahjongTing` and already includes manual hand input, ready-hand / winning-hand calculation, camera scanning, and CoreML tile recognition. The graduation-project direction is to connect these base capabilities to tournament workflows: multi-stream regional input, recognition events, match-state reconstruction, audience-facing analysis, and replay records.
 
 ## Current Scope
 
@@ -10,6 +12,13 @@ It supports Guangdong and Sichuan rules, manual tile input, ready-hand and winni
 - Hand operations: tile input, tile removal, clear, pong, kong, concealed kong, exposed kong
 - Scan entry: AVCapture scan page with CoreML row recognition
 - Test tools: development dataset export code has been moved to root `TestCode.swift`
+
+## Tournament Positioning
+
+- Inputs: four player-hand video streams first; the discard area can be a video stream, manual input, or correction source.
+- Use cases: tournament records, referee checks, broadcast data display, and post-match replay.
+- Audience: tournament staff, broadcast data operators, and viewers. Players do not receive real-time decision information.
+- Technical focus: regional video perception, recognition-event synchronization, match-state reconstruction, legality checks, and data visualization.
 
 ## Project Structure
 
@@ -33,9 +42,11 @@ See `THIRD_PARTY_NOTICES_EN.md` for data sources, third-party references, weight
 
 ## Next
 
-- Add multi-frame voting and ordering correction
-- Improve recognition under complex backgrounds
-- Add test cases and screenshots
+- Support public tournament video splitting, fixed-camera clips, and later real-time iOS capture
+- Wrap recognition output as timestamped regional events with confidence scores
+- Reconstruct hands, discards, melds, visible tiles, and legality conflicts
+- Display ready-hand, effective tiles, remaining effective tiles, and trend snapshots for staff and viewers
+- Save events, manual confirmations, and state snapshots for replay
 
 ## License
 
