@@ -39,7 +39,7 @@
 - 主机：`WIN-8N401EAPS0V`
 - SSH 登录身份：`win-8n401eaps0v\\administrator`
 - 独立工作副本：`C:\\Users\\Administrator\\codex-workspaces\\MahjongVisionSync`
-- 已验证与 Mac 同步的基线提交：`8a36407`
+- 已验证与 Mac 同步的初始化基线提交：`8a36407`。交接文档提交 `725feca` 创建在此之后；下一项 Windows 远程任务开始前必须先 `git fetch origin` 并快进到 `origin/main`。
 - 已有工具：Git 2.54、Python 3.11（另有 `py` 3.13）、Node 18/npm 10、NVIDIA GeForce RTX 4060 Ti。
 - 当前缺少：CMake、Visual Studio/MSBuild、FFmpeg、.NET SDK。
 - 已通过的 Windows 任务：在独立副本执行 `py -3.11 -m compileall -q tools`。
