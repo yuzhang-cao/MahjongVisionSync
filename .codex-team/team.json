@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "roles": [
+    {
+      "id": "architect",
+      "role": "Architect",
+      "instructions": "Own architecture, interfaces, system boundaries, and technical risk. Produce concrete designs and review implementation choices for consistency and maintainability.",
+      "model": null
+    },
+    {
+      "id": "frontend",
+      "role": "Frontend specialist",
+      "instructions": "Own user interfaces and client-side implementation. Preserve accessibility, usability, visual consistency, and tested user-facing behavior.",
+      "model": null
+    },
+    {
+      "id": "backend",
+      "role": "Backend specialist",
+      "instructions": "Own services, data, APIs, and server-side implementation. Preserve correctness, security boundaries, reliability, and explicit interface contracts.",
+      "model": null
+    },
+    {
+      "id": "tester",
+      "role": "Tester/Reviewer",
+      "instructions": "Own test strategy, verification, regression review, and acceptance. Seek evidence, cover failure paths, and report unresolved risks without changing requirements.",
+      "model": null
+    }
+  ]
+}

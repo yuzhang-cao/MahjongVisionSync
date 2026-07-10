@@ -7,3 +7,8 @@ xcuserdata/
 
 __pycache__/
 *.py[cod]
+.codex-team/state.json
+.codex-team/events.jsonl
+.codex-team/team.lock
+.codex-team/control.json
+.codex-team/control.sock*
