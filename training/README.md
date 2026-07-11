@@ -36,3 +36,36 @@ Validation command:
 ```bash
 python3 -m tools.training_dataset.validate_manifest path/to/manifest.json
 ```
+
+## Windows training environment
+
+The Windows RTX node reuses the installed CUDA-enabled PyTorch build through a
+project-local virtual environment:
+
+```powershell
+py -3.11 -m venv --system-site-packages .venv-training
+.\.venv-training\Scripts\python.exe -m pip install -r training\requirements-windows.txt
+.\.venv-training\Scripts\python.exe tools\training_environment_report.py --require-gpu --output training\reports\windows-environment.json
+```
+
+The pinned packages are training tools, not application runtime dependencies.
+Ultralytics is distributed under AGPL-3.0; its use and generated model delivery
+must remain recorded in the model manifest and third-party notices.
+
+## Synthetic GPU smoke run
+
+The smoke command creates colored rectangles and YOLO labels solely to verify
+CUDA training and ONNX export. It is not a Mahjong accuracy run and its weights
+must never replace an application model.
+
+```powershell
+.\.venv-training\Scripts\python.exe -m tools.run_training_smoke --profile mcr --device 0
+```
+
+Generated inputs are written below `training/smoke-data/`; run logs, weights,
+metrics, and the ONNX file are written below `training/runs/`. Both directories
+are intentionally ignored by Git. A successful run leaves a
+`smoke-summary.json` file in its run directory.
+
+Formal training remains blocked until self-captured MCR and Riichi manifests
+pass validation and their image sources and licenses are approved.

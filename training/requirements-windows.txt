@@ -1,0 +1,5 @@
+# Keep the Windows training toolchain reproducible. CUDA PyTorch is supplied by
+# the host through a --system-site-packages virtual environment.
+ultralytics==8.4.92
+onnx==1.22.0
+onnxruntime==1.27.0

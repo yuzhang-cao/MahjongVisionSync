@@ -7,6 +7,11 @@ xcuserdata/
 
 __pycache__/
 *.py[cod]
+.venv*/
+training/datasets/
+training/smoke-data/
+training/runs/
+training/artifacts/
 .codex-team/state.json
 .codex-team/events.jsonl
 .codex-team/team.lock
