@@ -1,0 +1,38 @@
+{
+  "created_at": "2026-07-11T12:17:29.755774+00:00",
+  "nvidia_smi": {
+    "available": true,
+    "error": null,
+    "output": [
+      "NVIDIA GeForce RTX 4060 Ti, 560.94, 16380"
+    ],
+    "returncode": 0
+  },
+  "packages": {
+    "Pillow": "11.3.0",
+    "chardet": "5.2.0",
+    "charset-normalizer": "3.4.3",
+    "numpy": "2.3.3",
+    "onnx": "1.22.0",
+    "onnxruntime": "1.27.0",
+    "opencv-python": "4.13.0.92",
+    "requests": "2.32.5",
+    "torch": "2.5.1+cu121",
+    "torchaudio": "2.5.1+cu121",
+    "torchvision": "0.20.1+cu121",
+    "ultralytics": "8.4.92",
+    "urllib3": "2.5.0"
+  },
+  "platform": "Windows-10-10.0.19045-SP0",
+  "python_executable": "C:\\Users\\Administrator\\codex-workspaces\\MahjongVisionSync\\.venv-training\\Scripts\\python.exe",
+  "python_version": "3.11.5",
+  "schema_version": 1,
+  "torch_gpu": {
+    "available": true,
+    "device_count": 1,
+    "devices": [
+      "NVIDIA GeForce RTX 4060 Ti"
+    ],
+    "torch_cuda_version": "12.1"
+  }
+}

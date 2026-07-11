@@ -1,0 +1,16 @@
+{
+  "batch": 2,
+  "best_weights": "C:\\Users\\Administrator\\codex-workspaces\\MahjongVisionSync\\training\\runs\\smoke-riichi_mleague-20260711T121525Z\\weights\\best.pt",
+  "class_count": 37,
+  "created_at": "2026-07-11T12:15:34.389706+00:00",
+  "device": "0",
+  "epochs": 1,
+  "gpu_name": "NVIDIA GeForce RTX 4060 Ti",
+  "imgsz": 128,
+  "onnx_model": "C:\\Users\\Administrator\\codex-workspaces\\MahjongVisionSync\\training\\runs\\smoke-riichi_mleague-20260711T121525Z\\weights\\best.onnx",
+  "profile": "riichi_mleague",
+  "schema_version": 1,
+  "synthetic_only": true,
+  "torch_version": "2.5.1+cu121",
+  "ultralytics_version": "8.4.92"
+}

@@ -1,6 +1,6 @@
 # MahjongVisionSync 开发交接与多 Agent 运行说明
 
-最后更新：2026-07-11（Windows 训练节点职责更新后）
+最后更新：2026-07-11（Windows GPU 冒烟训练完成后）
 
 ## 1. 项目目标
 
@@ -39,14 +39,15 @@
 - 主机：`WIN-8N401EAPS0V`
 - SSH 登录身份：`win-8n401eaps0v\\administrator`
 - 独立工作副本：`C:\\Users\\Administrator\\codex-workspaces\\MahjongVisionSync`
-- 已验证与 Mac 同步的初始化基线提交：`8a36407`。交接文档提交 `725feca` 创建在此之后；下一项 Windows 远程任务开始前必须先 `git fetch origin` 并快进到 `origin/main`。
+- Windows 独立副本已于 2026-07-11 与 `origin/main` 同步；每项远程任务开始前仍须执行 `git fetch origin` 并以 `git merge --ff-only origin/main` 快进。
 - 已有工具：Git 2.54、Python 3.11（另有 `py` 3.13）、Node 18/npm 10、NVIDIA GeForce RTX 4060 Ti。
-- 当前缺少：CMake、Visual Studio/MSBuild、FFmpeg、.NET SDK。
-- 已通过的 Windows 任务：在独立副本执行 `py -3.11 -m compileall -q tools`。
+- 当前缺少：CMake、Visual Studio/MSBuild、FFmpeg、.NET SDK；这些不是现阶段 Python 训练冒烟链路的阻塞项。
+- 已建立项目本地训练环境：`.venv-training` 使用 Python 3.11 和系统已有的 CUDA PyTorch，并安装 `ultralytics 8.4.92`、`onnx 1.22.0`、`onnxruntime 1.27.0`。
 - 已确认职责更新：Windows RTX 4060 Ti 节点必须承担 MCR 与 M.League Riichi 两套数据集的预处理、训练、评估、指标汇总和 ONNX 等可移植中间模型导出。
 - 已确认模型与分析口径：MCR 模型覆盖 144 张牌对应的 42 个视觉语义类别；M.League Riichi 模型覆盖 136 张牌对应的 37 个视觉语义类别；个人胜率采用蒙特卡洛模拟，四家获胜份额与流局概率归一化合计 100%。
-- 2026-07-11 核心直接只读训练环境核验：`winpc` 可达，Windows 10 64 位，内存约 16 GB；NVIDIA GeForce RTX 4060 Ti 16 GB，驱动 560.94，`nvidia-smi` 显示 CUDA 12.6，`nvcc` 未安装；Python 3.11.5 和 3.13.1 可用；Python 3.11 下 `torch 2.5.1+cu121`、`torchvision 0.20.1+cu121`、`torchaudio 2.5.1+cu121`、`opencv-python 4.13.0.92`、`Pillow 11.3.0`、`numpy 2.3.3`、`pandas 2.3.2`、`tqdm 4.67.1` 已存在，`onnx`、`onnxruntime`、`ultralytics` 未安装；`torch.cuda.is_available()` 为 true，设备为 RTX 4060 Ti。
-- 同次核验的磁盘空闲空间：C 约 501 GB、D 约 2496 GB、E 约 2612 GB、G 约 79 GB。Windows 独立仓库仍在 `8a36407`，未执行 `fetch`、`pull` 或远程文件修改。
+- 2026-07-11 环境报告确认：Windows 10 64 位；NVIDIA GeForce RTX 4060 Ti 16 GB，驱动 560.94；Python 3.11.5；`torch 2.5.1+cu121` 且 `torch.cuda.is_available()` 为 true。完整版本记录见 `training/reports/windows-environment.json`。
+- 同次核验的磁盘空闲空间：C 约 501 GB、D 约 2496 GB、E 约 2612 GB、G 约 79 GB。
+- 已完成两套合成数据 GPU 冒烟训练：MCR 42 类和 M.League Riichi 37 类均为 1 epoch、图像尺寸 128、batch 2，训练使用 CUDA 设备 0，且成功生成 PyTorch 权重和 ONNX 模型。摘要见 `training/reports/windows-smoke-mcr-20260711.json` 与 `training/reports/windows-smoke-riichi-mleague-20260711.json`；远端完整产物分别在 `training\\runs\\smoke-mcr-20260711T121235Z` 和 `training\\runs\\smoke-riichi_mleague-20260711T121525Z`，仅用于链路验证，不能作为应用识别模型。
 
 ### 跨平台边界
 
@@ -55,7 +56,7 @@
 - iOS App 构建、Xcode 测试、CoreML 转换/集成、CoreML 运行验证、模拟器和真机验证必须在 Mac 上完成；不要派给 Windows。
 - Windows 负责训练侧工作：数据集预处理、训练环境审计、GPU 训练、评估、ONNX 或其他可移植中间模型导出，以及跨平台 Python/OpenCV/ONNX 工具链。
 - Mac 与 Windows **绝不能共用同一个 Git 工作目录**。两端通过 Git 分支、提交和 `fetch/pull` 交接。
-- 当前未批准安装任何 Windows 训练依赖，也未批准启动实际训练。必须先完成只读训练环境审计、数据集位置/格式确认和依赖清单审查，再由核心向用户申请安装或训练授权。
+- Windows 基础训练依赖安装、仓库同步和合成数据 GPU 冒烟训练已获授权并完成。正式模型训练仍只能在新拍摄的目标牌具数据集到位、manifest 校验通过且来源许可明确后启动；不得使用此前 GitHub 或 Windows 桌面上的旧数据集替代。
 
 ## 4. 持久团队运行状态
 
@@ -89,17 +90,17 @@ codex-team chat /Users/caoyuzhang/Desktop/MahjongVisionSync
 
 ## 5. 目前正在执行的任务
 
-当前没有必须继续等待的旧只读兼容性任务。此前 Windows 兼容性审计已确认 Windows 不能验证原生 iOS/Xcode/CoreML 运行环境，但 Windows 的训练侧职责已经按本文件更新。
+当前没有必须继续等待的远程训练进程。此前 Windows 兼容性审计已确认 Windows 不能验证原生 iOS/Xcode/CoreML 运行环境，但 Windows 的训练侧职责已经按本文件更新。
 
 首轮 Windows 训练环境只读核验已经由核心直接完成，因为 `windows-training-builder` 同范围任务已耗尽 3 次尝试且无可用报告。不要再创建同范围 Agent 任务。
 
-后续 Windows 任务应等待数据集位置/格式和依赖清单明确后再派发；在获得用户授权前，不安装软件、不启动训练、不改动数据集、不改动远程仓库。
+Windows 环境安装与 MCR、M.League Riichi 两套合成数据 GPU 冒烟链路均已完成。下一项阻塞是两套新拍摄目标牌具数据的位置、标注和 manifest；在这些输入就绪前不得启动正式训练，也不得把合成冒烟权重或旧公开数据权重交付给 iOS。
 
 ## 6. 建议的下一阶段（须由核心根据审计报告确认）
 
-1. 基于已完成的 Windows 训练环境只读核验，确认 MCR 与 M.League Riichi 两套数据集的位置、许可、格式、标签映射和划分策略。
-2. 审查 Windows 仓库同步方案、依赖清单和环境方案，再单独请求安装授权，例如 Python 虚拟环境、PyTorch/CUDA 适配包、OpenCV、Pillow、numpy、ONNX/ONNX Runtime、数据标注或转换工具。
-3. 批准后由 Windows 训练节点执行小样本 smoke 预处理、训练、评估和 ONNX 导出；通过后再扩大到正式训练。
+1. 确认 MCR 与 M.League Riichi 两套新拍摄数据集的位置、许可、格式、标签映射和按 `capture_group` 隔离的划分策略。
+2. 为两套数据生成 manifest，执行仓库中的校验器，并检查类别覆盖、重复图片、边界框和训练/验证/测试泄漏。
+3. 先分别执行真实小样本训练与评估，验收通过后再扩大到正式训练；每次记录数据集版本、参数、指标、权重哈希和 ONNX 导出路径。
 4. Mac 端只接收验收通过的可移植模型，负责 CoreML 转换/集成以及 Xcode、iOS 模拟器和真机验证。
 5. 核心执行集成验证：训练产物记录 + Windows 训练/导出报告 + Mac CoreML/Xcode/iOS 验证 + Git 状态检查。
 
@@ -112,7 +113,7 @@ codex-team chat /Users/caoyuzhang/Desktop/MahjongVisionSync
 
 必须使用已有的持久多 Agent 调度器：用户 -> 核心 Agent -> 固定成员 Agent；只有核心拥有管理工具。先阅读 docs/development-handoff.md，然后执行 codex-team status、codex-team tasks，并通过 codex-team chat 恢复已有核心线程。不要重新 init，不要删除 .codex-team 状态，不要重复派发已失败的同范围 Windows 训练环境审计；如需复核环境，由核心直接执行最小只读 SSH 探针。
 
-Mac 是核心调度端；Windows 通过 ssh winpc 作为独立训练/构建节点，工作副本在 C:\\Users\\Administrator\\codex-workspaces\\MahjongVisionSync。不能把 iOS/Xcode/CoreML 构建或 CoreML 运行验证派给 Windows；Windows 负责 MCR 与 M.League Riichi 数据集预处理、训练、评估和 ONNX 等可移植模型导出。训练依赖安装和实际训练必须等数据集到位、依赖清单审查并获得用户授权后再执行。所有代码任务都要小批次验证、提交，并由核心集成。
+Mac 是核心调度端；Windows 通过 ssh winpc 作为独立训练/构建节点，工作副本在 C:\\Users\\Administrator\\codex-workspaces\\MahjongVisionSync。不能把 iOS/Xcode/CoreML 构建或 CoreML 运行验证派给 Windows；Windows 负责 MCR 与 M.League Riichi 数据集预处理、训练、评估和 ONNX 等可移植模型导出。Windows 基础训练环境和合成 GPU 冒烟链路已经完成；继续前先读取 training/reports 下的证据报告。正式训练必须等待新拍摄目标数据到位并通过 manifest 校验，禁止使用旧 GitHub 数据集或合成冒烟权重代替。所有代码任务都要小批次验证、提交，并由核心集成。
 ```
 
 ## 8. 关键安全与运行要求

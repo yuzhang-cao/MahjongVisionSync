@@ -67,5 +67,18 @@ metrics, and the ONNX file are written below `training/runs/`. Both directories
 are intentionally ignored by Git. A successful run leaves a
 `smoke-summary.json` file in its run directory.
 
+The Windows node completed both the MCR 42-class and M.League Riichi 37-class
+smoke runs on 2026-07-11 with an RTX 4060 Ti. The committed evidence files are:
+
+- `training/reports/windows-environment.json`
+- `training/reports/windows-smoke-mcr-20260711.json`
+- `training/reports/windows-smoke-riichi-mleague-20260711.json`
+
+The full ignored run directories remain on Windows at
+`training/runs/smoke-mcr-20260711T121235Z` and
+`training/runs/smoke-riichi_mleague-20260711T121525Z`. These reports prove that
+CUDA training and ONNX export work; they do not report Mahjong recognition
+quality.
+
 Formal training remains blocked until self-captured MCR and Riichi manifests
 pass validation and their image sources and licenses are approved.
