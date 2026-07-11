@@ -43,7 +43,7 @@ Riichi 相关规则不得通过复用 MCR 或广东/四川的胡牌路径来隐�
 - `mcrTileModel`：面向 MCR/国标比赛或中文麻将牌面风格。
 - `riichiMLeagueTileModel`：面向 M.League 风格 Riichi 牌面、赤宝牌和日麻视觉风格。
 
-两个模型可以采用不同训练数据、标签扩展和置信度校准方式，但对系统其他模块必须暴露同一输出契约：
+两个模型可以采用不同训练数据、标签扩展和置信度校准方式。Windows RTX 4060 Ti 节点负责两套数据集的预处理、训练、评估和 ONNX 等可移植中间模型导出；Mac 负责将验收通过的模型转换或集成为 CoreML，并完成 Xcode、iOS 模拟器和真机验证。两个模型对系统其他模块必须暴露同一输出契约：
 
 ```swift
 struct TileRecognitionCandidate: Codable {
@@ -105,12 +105,16 @@ Equity 结果不得在比赛现场向选手提供实时决策建议。UI 和导�
 
 ## 6. 平台与构建边界
 
-已完成的 Windows 兼容性审计结论必须进入后续排期：
+平台职责按“训练与可移植模型”和“iOS/CoreML 集成验证”拆分：
 
 - Windows 远程节点不能执行原生 iOS/Xcode/CoreML 构建、模拟器测试、签名检查或 Vision/CoreML 运行验证。
-- Mac/Xcode 仍是 iOS App、CoreML 编译、设备相机和 SwiftUI 验证的唯一可信构建环境。
-- Windows 只适合静态检查、文档检查、跨平台数据契约、离线视频预处理、未来 ONNX/OpenCV/Python 模块或显式跨平台工具。
-- 任何 Windows 构建任务必须先有独立的跨平台入口，不能把 Xcode 工程作为 Windows 构建目标。
+- Windows RTX 4060 Ti 节点负责 MCR 与 M.League Riichi 两套数据集的预处理、训练、评估、指标汇总和 ONNX 等可移植中间模型导出。
+- Mac/Xcode 是 iOS App、CoreML 转换或集成、设备相机、SwiftUI、模拟器和真机验证的可信环境。
+- Windows 训练任务必须先通过只读环境审计、数据集位置和格式确认、依赖清单审查、训练脚本/配置审查和小样本 smoke 训练计划审查。
+- 当前未批准安装训练依赖，也未批准启动实际训练；依赖安装和训练执行必须在数据集到位、依赖清单审查后单独批准。
+- 任何 Windows 任务都不能把 Xcode 工程作为构建目标；Windows 产物应以数据集清单、训练日志、评估报告、ONNX 或其他可移植模型为交接边界。
+
+2026-07-11 首轮只读核验已确认 Windows 节点具备 RTX 4060 Ti、NVIDIA 驱动、Python 3.11、PyTorch CUDA 12.1 可用环境，以及充足的 D/E 盘空间；但 `onnx`、`onnxruntime` 和 `ultralytics` 尚未安装，Windows 仓库副本也落后于 Mac 当前工作副本。该核验不等于批准训练。
 
 ## 7. 实施顺序
 
@@ -119,8 +123,10 @@ Equity 结果不得在比赛现场向选手提供实时决策建议。UI 和导�
 1. 完成本规格和相关系统设计文档确认。
 2. 定义 `RulesProfile`、`RecognitionModelProfile`、识别事件、状态快照和 equity 快照的数据契约。
 3. 为数据契约准备固定样例和测试输入。
-4. 在规则档案边界内实现 MCR 与 M.League 风格 Riichi，不直接污染现有广东/四川逻辑。
-5. 在识别模型边界内接入双模型，不让模型输出直接修改牌局状态。
-6. 在展示和复盘层接入 equity 指标，并保留不确定性说明。
+4. 基于已完成的 Windows 训练环境只读审计，补齐数据集格式定义、仓库同步计划和依赖清单审查。
+5. 在规则档案边界内实现 MCR 与 M.League 风格 Riichi，不直接污染现有广东/四川逻辑。
+6. 在识别模型边界内训练、评估和导出双模型，不让模型输出直接修改牌局状态。
+7. 在 Mac 端转换或集成验收通过的模型为 CoreML，并完成 Xcode、iOS 模拟器和真机验证。
+8. 在展示和复盘层接入 equity 指标，并保留不确定性说明。
 
-在第 1 至第 3 步完成前，不应改造 `Recognizer.swift` 或 `Engine.swift`。
+在第 1 至第 4 步完成前，不应改造 `Recognizer.swift`、`Engine.swift` 或启动实际训练。
