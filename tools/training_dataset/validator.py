@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+from math import isfinite
 
 from .categories import RULES_PROFILES, class_by_code, class_by_id
 
@@ -59,6 +60,7 @@ def _validate_images(images, rules_profile, errors: list[str]) -> None:
     by_code = class_by_code(rules_profile) if rules_profile in RULES_PROFILES else {}
     split_groups: dict[str, set[str]] = {split: set() for split in REQUIRED_SPLITS}
     group_to_split: dict[str, str] = {}
+    seen_image_paths: set[str] = set()
 
     for index, image in enumerate(images):
         prefix = f"images[{index}]"
@@ -68,6 +70,10 @@ def _validate_images(images, rules_profile, errors: list[str]) -> None:
         path = image.get("image")
         if not isinstance(path, str) or not path.strip():
             errors.append(f"{prefix}.image must be a non-empty string")
+        elif path in seen_image_paths:
+            errors.append(f"{prefix}.image is duplicated: {path}")
+        else:
+            seen_image_paths.add(path)
 
         split = image.get("split")
         if split not in REQUIRED_SPLITS:
@@ -92,7 +98,7 @@ def _validate_images(images, rules_profile, errors: list[str]) -> None:
 
 
 def _validate_positive_integer(value, field: str, errors: list[str]) -> None:
-    if not isinstance(value, int) or value <= 0:
+    if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
         errors.append(f"{field} must be a positive integer")
 
 
@@ -107,14 +113,14 @@ def _validate_annotations(annotations, by_id, by_code, prefix: str, errors: list
             continue
         class_id = annotation.get("class_id")
         code = annotation.get("code")
-        if not isinstance(class_id, int):
+        if not isinstance(class_id, int) or isinstance(class_id, bool):
             errors.append(f"{ann_prefix}.class_id must be an integer")
         if not isinstance(code, str) or not code.strip():
             errors.append(f"{ann_prefix}.code must be a non-empty string")
 
         expected_by_id = by_id.get(class_id)
         expected_by_code = by_code.get(code)
-        if isinstance(class_id, int) and expected_by_id is None:
+        if isinstance(class_id, int) and not isinstance(class_id, bool) and expected_by_id is None:
             errors.append(f"{ann_prefix}.class_id is not valid: {class_id}")
         if isinstance(code, str) and code and expected_by_code is None:
             errors.append(f"{ann_prefix}.code is not valid: {code}")
@@ -130,8 +136,8 @@ def _validate_bbox(bbox, prefix: str, errors: list[str]) -> None:
         return
     for key in ("x", "y", "width", "height"):
         value = bbox.get(key)
-        if not isinstance(value, (int, float)):
-            errors.append(f"{prefix}.bbox.{key} must be numeric")
+        if not _is_finite_number(value):
+            errors.append(f"{prefix}.bbox.{key} must be a finite number")
             continue
         if key in ("width", "height"):
             if value <= 0:
@@ -142,6 +148,10 @@ def _validate_bbox(bbox, prefix: str, errors: list[str]) -> None:
     y = bbox.get("y")
     width = bbox.get("width")
     height = bbox.get("height")
-    if all(isinstance(value, (int, float)) for value in (x, y, width, height)):
+    if all(_is_finite_number(value) for value in (x, y, width, height)):
         if x + width > 1 or y + height > 1:
             errors.append(f"{prefix}.bbox must fit inside normalized image bounds")
+
+
+def _is_finite_number(value) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and isfinite(value)

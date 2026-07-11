@@ -59,6 +59,22 @@ class TrainingDatasetSpecTests(unittest.TestCase):
         errors = validate_manifest(manifest)
         self.assertTrue(any("bbox.width must be positive" in error for error in errors))
 
+    def test_duplicate_image_paths_are_rejected(self):
+        manifest = json.loads((FIXTURES / "valid_mcr_manifest.json").read_text(encoding="utf-8"))
+        manifest["images"][1]["image"] = manifest["images"][0]["image"]
+        errors = validate_manifest(manifest)
+        self.assertTrue(any("image is duplicated" in error for error in errors))
+
+    def test_boolean_and_non_finite_numbers_are_rejected(self):
+        manifest = json.loads((FIXTURES / "valid_mcr_manifest.json").read_text(encoding="utf-8"))
+        manifest["images"][0]["width"] = True
+        manifest["images"][0]["annotations"][0]["class_id"] = True
+        manifest["images"][0]["annotations"][0]["bbox"]["x"] = float("nan")
+        errors = validate_manifest(manifest)
+        self.assertTrue(any("width must be a positive integer" in error for error in errors))
+        self.assertTrue(any("class_id must be an integer" in error for error in errors))
+        self.assertTrue(any("bbox.x must be a finite number" in error for error in errors))
+
     def test_cli_accepts_valid_manifest_and_rejects_invalid_manifest(self):
         valid = subprocess.run(
             [sys.executable, "-m", "tools.training_dataset.validate_manifest", str(FIXTURES / "valid_riichi_manifest.json")],
