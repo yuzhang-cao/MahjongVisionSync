@@ -44,6 +44,7 @@
 - 当前缺少：CMake、Visual Studio/MSBuild、FFmpeg、.NET SDK。
 - 已通过的 Windows 任务：在独立副本执行 `py -3.11 -m compileall -q tools`。
 - 已确认职责更新：Windows RTX 4060 Ti 节点必须承担 MCR 与 M.League Riichi 两套数据集的预处理、训练、评估、指标汇总和 ONNX 等可移植中间模型导出。
+- 已确认模型与分析口径：MCR 模型覆盖 144 张牌对应的 42 个视觉语义类别；M.League Riichi 模型覆盖 136 张牌对应的 37 个视觉语义类别；个人胜率采用蒙特卡洛模拟，四家获胜份额与流局概率归一化合计 100%。
 - 2026-07-11 核心直接只读训练环境核验：`winpc` 可达，Windows 10 64 位，内存约 16 GB；NVIDIA GeForce RTX 4060 Ti 16 GB，驱动 560.94，`nvidia-smi` 显示 CUDA 12.6，`nvcc` 未安装；Python 3.11.5 和 3.13.1 可用；Python 3.11 下 `torch 2.5.1+cu121`、`torchvision 0.20.1+cu121`、`torchaudio 2.5.1+cu121`、`opencv-python 4.13.0.92`、`Pillow 11.3.0`、`numpy 2.3.3`、`pandas 2.3.2`、`tqdm 4.67.1` 已存在，`onnx`、`onnxruntime`、`ultralytics` 未安装；`torch.cuda.is_available()` 为 true，设备为 RTX 4060 Ti。
 - 同次核验的磁盘空闲空间：C 约 501 GB、D 约 2496 GB、E 约 2612 GB、G 约 79 GB。Windows 独立仓库仍在 `8a36407`，未执行 `fetch`、`pull` 或远程文件修改。
 
