@@ -12,6 +12,8 @@ training/datasets/
 training/smoke-data/
 training/runs/
 training/artifacts/
+runs/
+yolo*.pt
 .codex-team/state.json
 .codex-team/events.jsonl
 .codex-team/team.lock
