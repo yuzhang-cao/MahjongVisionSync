@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "dataset_id": "bad-smoke",
+  "tile_set_id": "wrong_tile_set",
+  "rules_profile": "bad_profile",
+  "visual_domain": "riichi_mleague",
+  "class_count": 41,
+  "license": "",
+  "source": "",
+  "images": [
+    {
+      "image": "samples/bad/no_annotations.jpg",
+      "split": "train",
+      "capture_group": "shared_group",
+      "width": 1920,
+      "height": 1080,
+      "annotations": []
+    },
+    {
+      "image": "",
+      "split": "validation",
+      "capture_group": "shared_group",
+      "width": 0,
+      "height": 1080,
+      "annotations": [
+        {
+          "class_id": 999,
+          "code": "not_a_tile",
+          "bbox": {"x": 0.95, "y": 0.95, "width": 0.1, "height": 0.1}
+        }
+      ]
+    }
+  ]
+}

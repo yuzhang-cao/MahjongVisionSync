@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "dataset_id": "riichi-smoke",
+  "tile_set_id": "riichi_mleague_136_37",
+  "rules_profile": "riichi_mleague",
+  "visual_domain": "riichi_mleague",
+  "class_count": 37,
+  "license": "fixture-only",
+  "source": "synthetic-fixture",
+  "images": [
+    {
+      "image": "samples/riichi/train/man_5_red_001.jpg",
+      "split": "train",
+      "capture_group": "riichi_train_table_001",
+      "width": 1920,
+      "height": 1080,
+      "annotations": [
+        {
+          "class_id": 34,
+          "code": "red_five_man",
+          "bbox": {"x": 0.1, "y": 0.2, "width": 0.08, "height": 0.12}
+        }
+      ]
+    },
+    {
+      "image": "samples/riichi/validation/pin_5_red_001.jpg",
+      "split": "validation",
+      "capture_group": "riichi_validation_table_001",
+      "width": 1920,
+      "height": 1080,
+      "annotations": [
+        {
+          "class_id": 35,
+          "code": "red_five_pin",
+          "bbox": {"x": 0.14, "y": 0.22, "width": 0.08, "height": 0.12}
+        }
+      ]
+    },
+    {
+      "image": "samples/riichi/test/sou_5_red_001.jpg",
+      "split": "test",
+      "capture_group": "riichi_test_table_001",
+      "width": 1920,
+      "height": 1080,
+      "annotations": [
+        {
+          "class_id": 36,
+          "code": "red_five_sou",
+          "bbox": {"x": 0.18, "y": 0.24, "width": 0.08, "height": 0.12}
+        }
+      ]
+    }
+  ]
+}

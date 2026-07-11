@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "dataset_id": "mcr-smoke",
+  "tile_set_id": "mcr_144_42",
+  "rules_profile": "mcr",
+  "visual_domain": "mcr",
+  "class_count": 42,
+  "license": "fixture-only",
+  "source": "synthetic-fixture",
+  "images": [
+    {
+      "image": "samples/mcr/train/east_001.jpg",
+      "split": "train",
+      "capture_group": "mcr_train_table_001",
+      "width": 1920,
+      "height": 1080,
+      "annotations": [
+        {
+          "class_id": 27,
+          "code": "east",
+          "bbox": {"x": 0.1, "y": 0.2, "width": 0.08, "height": 0.12}
+        },
+        {
+          "class_id": 38,
+          "code": "plum",
+          "bbox": {"x": 0.22, "y": 0.2, "width": 0.08, "height": 0.12}
+        }
+      ]
+    },
+    {
+      "image": "samples/mcr/validation/spring_001.jpg",
+      "split": "validation",
+      "capture_group": "mcr_validation_table_001",
+      "width": 1920,
+      "height": 1080,
+      "annotations": [
+        {
+          "class_id": 34,
+          "code": "spring",
+          "bbox": {"x": 0.15, "y": 0.25, "width": 0.08, "height": 0.12}
+        }
+      ]
+    },
+    {
+      "image": "samples/mcr/test/chrysanthemum_001.jpg",
+      "split": "test",
+      "capture_group": "mcr_test_table_001",
+      "width": 1920,
+      "height": 1080,
+      "annotations": [
+        {
+          "class_id": 41,
+          "code": "chrysanthemum",
+          "bbox": {"x": 0.2, "y": 0.3, "width": 0.08, "height": 0.12}
+        }
+      ]
+    }
+  ]
+}
