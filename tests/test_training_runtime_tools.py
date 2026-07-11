@@ -14,6 +14,7 @@ class TrainingRuntimeToolTests(unittest.TestCase):
         self.assertEqual(1, report["schema_version"])
         self.assertIn("python_version", report)
         self.assertIn("packages", report)
+        self.assertIn("chardet", report["packages"])
         self.assertIn("torch_gpu", report)
         self.assertIn("nvidia_smi", report)
         json.dumps(report)

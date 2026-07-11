@@ -23,6 +23,10 @@ PACKAGES = (
     "numpy",
     "Pillow",
     "opencv-python",
+    "requests",
+    "urllib3",
+    "chardet",
+    "charset-normalizer",
 )
 
 

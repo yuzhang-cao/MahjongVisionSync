@@ -3,3 +3,6 @@
 ultralytics==8.4.92
 onnx==1.22.0
 onnxruntime==1.27.0
+# The host exposes chardet 7.x through system site packages, which is outside
+# the version range supported by requests 2.32.x.
+chardet==5.2.0
